@@ -4,8 +4,10 @@ from flask_pymongo import PyMongo
 from flask_bcrypt import Bcrypt
 import jwt
 from functools import wraps
+from flask_cors import CORS  # Import the CORS extension
 
 app = Flask(__name__)
+CORS(app)  # Enable CORS for all routes
 app.config['MONGO_URI'] = 'mongodb+srv://jlmrnl001:JAusi1Aaic0ndIRR@cluster0.m34jzxm.mongodb.net/test'
 mongo = PyMongo(app)
 bcrypt = Bcrypt(app)
@@ -47,7 +49,7 @@ def login():
         token = jwt.encode({'id': str(user['_id'])}, app.config['SECRET_KEY'])
         return jsonify({'token': token, 'message': 'Login successful'}), 200
 
-    return jsonify({'message': 'Invalid username or password'}), 401p
+    return jsonify({'message': 'Invalid username or password'}), 401
 
 @app.route('/notes', methods=['GET'])
 @token_required
